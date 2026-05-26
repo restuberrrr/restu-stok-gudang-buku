@@ -1,0 +1,22 @@
+CREATE DATABASE IF NOT EXISTS stok_gudang_buku CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE stok_gudang_buku;
+
+CREATE TABLE IF NOT EXISTS books (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(160) NOT NULL,
+  category VARCHAR(80) NOT NULL,
+  shelf VARCHAR(40) NOT NULL,
+  stock INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE books ADD COLUMN IF NOT EXISTS category VARCHAR(80) NOT NULL DEFAULT 'Umum';
+ALTER TABLE books ADD COLUMN IF NOT EXISTS shelf VARCHAR(40) NOT NULL DEFAULT 'A-01';
+ALTER TABLE books ADD COLUMN IF NOT EXISTS stock INT NOT NULL DEFAULT 0;
+ALTER TABLE books ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+INSERT INTO books (title, category, shelf, stock) VALUES
+('Dasar Pemrograman Web', 'Teknologi', 'A-01', 12),
+('Algoritma dan Struktur Data', 'Kuliah', 'A-02', 7),
+('Manajemen Database MySQL', 'Database', 'B-01', 4)
+ON DUPLICATE KEY UPDATE title = VALUES(title);

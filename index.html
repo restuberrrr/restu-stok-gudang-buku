@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Stok Gudang Buku</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Inventory Web App</p>
+          <h1>Sistem Stok Gudang Buku</h1>
+          <p>Kelola buku masuk, buku keluar, rak, dan stok rendah dari satu dashboard ringan.</p>
+        </div>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section class="panel">
+        <form id="bookForm">
+          <input type="hidden" id="bookId" />
+          <label>Judul Buku<input id="title" required placeholder="Contoh: Dasar Pemrograman Web" /></label>
+          <label>Kategori<input id="category" required placeholder="Teknologi" /></label>
+          <label>Rak<input id="shelf" required placeholder="A-01" /></label>
+          <label>Stok<input id="stock" required type="number" min="0" value="1" /></label>
+          <button type="submit">Simpan Buku</button>
+          <button type="button" class="ghost" id="resetForm">Reset</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <h2>Data Buku</h2>
+          <input id="search" placeholder="Cari buku, kategori, atau rak" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>Rak</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="bookRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
+
