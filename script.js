@@ -1,3 +1,5 @@
+import { supabaseRequest } from './supabase.js';
+
 const state = {
   books: [],
   query: '',
@@ -5,11 +7,10 @@ const state = {
 
 const form = document.querySelector('#bookForm');
 const fields = ['bookId', 'title', 'category', 'shelf', 'stock'].reduce((acc, id) => ({ ...acc, [id]: document.querySelector(`#${id}`) }), {});
-const api = 'api.php';
+const table = 'portfolio_books';
 
 async function loadBooks() {
-  const response = await fetch(api);
-  state.books = await response.json();
+  state.books = await supabaseRequest(table);
   renderBooks();
 }
 
@@ -59,11 +60,12 @@ form.addEventListener('submit', (event) => {
     shelf: fields.shelf.value.trim(),
     stock: Number(fields.stock.value),
   };
-  await fetch(payload.id ? `${api}?id=${payload.id}` : api, {
-    method: payload.id ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+  if (payload.id) {
+    await supabaseRequest(table, { method: 'PATCH', id: payload.id, body: payload });
+  } else {
+    delete payload.id;
+    await supabaseRequest(table, { method: 'POST', body: payload });
+  }
   form.reset();
   fields.bookId.value = '';
   fields.stock.value = 1;
@@ -84,17 +86,14 @@ document.querySelector('#search').addEventListener('input', (event) => {
 document.querySelector('#bookRows').addEventListener('click', (event) => {
   const button = event.target.closest('button');
   if (!button) return;
-  const book = state.books.find((item) => item.id === button.dataset.id);
+  const book = state.books.find((item) => String(item.id) === button.dataset.id);
   if (!book) return;
   if (button.dataset.action === 'in' || button.dataset.action === 'out') {
-    fetch(`${api}?id=${book.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ delta: button.dataset.action === 'in' ? 1 : -1 }),
-    }).then(loadBooks);
+    const nextStock = Math.max(0, Number(book.stock) + (button.dataset.action === 'in' ? 1 : -1));
+    supabaseRequest(table, { method: 'PATCH', id: book.id, body: { stock: nextStock } }).then(loadBooks);
   }
   if (button.dataset.action === 'delete') {
-    fetch(`${api}?id=${book.id}`, { method: 'DELETE' }).then(loadBooks);
+    supabaseRequest(table, { method: 'DELETE', id: book.id }).then(loadBooks);
   }
   if (button.dataset.action === 'edit') {
     fields.bookId.value = book.id;

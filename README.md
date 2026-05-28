@@ -1,22 +1,18 @@
 # Sistem Stok Gudang Buku
 
-Aplikasi web sederhana untuk mengelola stok buku dengan PHP dan MySQL XAMPP.
+Aplikasi web sederhana untuk mengelola stok buku. Versi live memakai Supabase REST API, sehingga bisa berjalan di Vercel tanpa XAMPP.
 
 ## Cara Menjalankan
 
-1. Import database:
+Jalankan server static dari folder proyek:
 
 ```bash
-C:\xampp\mysql\bin\mysql.exe -u root < database/schema.sql
+python -m http.server 8011
 ```
 
-2. Jalankan PHP server dari folder proyek:
+Buka `http://127.0.0.1:8011`.
 
-```bash
-php -S 127.0.0.1:8011
-```
-
-3. Buka `http://127.0.0.1:8011`.
+Database cloud dibuat lewat SQL di repository portfolio utama: `supabase/schema.sql`.
 
 ## Fitur
 
